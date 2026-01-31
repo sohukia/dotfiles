@@ -108,14 +108,13 @@ plugins=(
   ssh
   ssh-agent
   node
-  npm
   eza
   python
-  pip
   sudo
   history
   colored-man-pages
   command-not-found
+  bun
   copyfile
   extract
   web-search
