@@ -2,7 +2,10 @@
 # https://organize.readthedocs.io
 
 rules:
-  - locations:
+  - name: "Organize Efrei files"
+    locations:
+      - ~/kDrive/Documents/Efrei/
+    
     filters:
     actions:
       - echo: "Hello, World!"
