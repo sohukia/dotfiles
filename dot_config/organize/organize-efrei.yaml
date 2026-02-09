@@ -1,8 +1,54 @@
-# organize configuration file
-# https://organize.readthedocs.io
-
 rules:
-  - locations:
+  # 1. Normalisation : Minuscules, remplace espaces et tirets par underscores, supprime les parenthèses
+  - name: "Normalisation des noms de fichiers"
+    locations:
+      - ~/kDrive/Documents/Efrei
+    subfolders: true
     filters:
+      - filename
     actions:
-      - echo: "Hello, World!"
+      - rename: "{{filename.lower().replace(' ', '_').replace('-', '_').replace('(', '').replace(')', '')}}"
+
+  # 2. Tri par matière (Regex basée sur votre structure actuelle)
+  - name: "Tri par dossiers matières"
+    locations:
+      - ~/kDrive/Documents/Efrei
+    filters:
+      - filename:
+          regex: '(?P<matiere>cisco|linux|crypto|english|comm_num|programmation|windows|art_argumenter)'
+    actions:
+      - move: "~/kDrive/Documents/Efrei/{{matiere}}/"
+
+  # 3. Regroupement des discours et présentations (GrandDiscours, Projet Pitch)
+  - name: "Tri Communication et Soft Skills"
+    locations:
+      - ~/kDrive/Documents/Efrei
+    filters:
+      - filename:
+          regex: '(?P<cat>discours|pitch|rendu_header)'
+    actions:
+      - move: "~/kDrive/Documents/Efrei/communication/"
+
+  # 4. Organisation interne des TPs (ex: linux_tp1 -> linux/tp1)
+  - name: "Sous-structuration des TPs"
+    locations:
+      - ~/kDrive/Documents/Efrei
+    subfolders: true
+    filters:
+      - filename:
+          regex: '.*tp_?(?P<num>\d+).*'
+    actions:
+      - move: "{path}/tp{{num}}/"
+
+  # 5. Rangement des fichiers par extension si non classés
+  - name: "Rangement par type de fichier (Reliquats)"
+    locations:
+      - ~/kDrive/Documents/Efrei
+    filters:
+      - extension:
+          - pdf
+          - docx
+          - pka
+          - zip
+    actions:
+      - move: "~/kDrive/Documents/Efrei/autres/{{extension}}/"
